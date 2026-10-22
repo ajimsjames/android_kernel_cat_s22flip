@@ -1,0 +1,68 @@
+/dts-v1/;
+
+#include "qm215.dtsi"
+#include "qm215-pm8916.dtsi"
+#include "qm215-audio.dtsi"
+
+/ {
+	model = "Qualcomm Technologies, Inc. QM215";
+	compatible = "qcom,qm215";
+	qcom,pmic-name = "PM8916";
+
+	reserved-memory {
+		cont_splash_mem2: splash_region@1 {
+			reg = <0x00 0x91300000 0x00 0x100000>;
+		};
+	};
+};
+
+/* Provide clock_gcc label for camera fixups in dtbo */
+clock_gcc: &gcc {
+};
+
+/* Provide missing pinctrl groups expected by S22 Flip DTBO */
+&tlmm {
+	pmx_mdss2: pmx_mdss2 {
+		mdss_spi_active: mdss_spi_active {
+			mux {
+				pins = "gpio68", "gpio125";
+				function = "gpio";
+			};
+
+			config {
+				pins = "gpio68", "gpio125";
+				drive-strength = <8>;
+				bias-pull-down;
+			};
+		};
+
+		mdss_spi_suspend: mdss_spi_suspend {
+			mux {
+				pins = "gpio68", "gpio125";
+				function = "gpio";
+			};
+
+			config {
+				pins = "gpio68", "gpio125";
+				drive-strength = <2>;
+				bias-pull-down;
+			};
+		};
+	};
+
+	hall_int_pin {
+		hall_sensor_int_default: hall_sensor_int_default {
+			mux {
+				pins = "gpio44";
+				function = "gpio";
+			};
+
+			config {
+				pins = "gpio44";
+				drive-strength = <16>;
+				bias-disable;
+			};
+		};
+	};
+};
+
